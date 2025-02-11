@@ -1,0 +1,37 @@
+/* NavBar.css for top bar */
+
+.topbar {
+  height: 60px; /* Adjust height as needed */
+  width: 100%; /* Full width */
+  position: fixed; /* Fixed at the top */
+  top: 0;
+  left: 0;
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.topbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex; /* Horizontal layout */
+}
+
+.topbar li {
+  margin: 0 15px;
+}
+
+.topbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+}
+
+.topbar a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}

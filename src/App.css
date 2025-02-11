@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.topnav {
+  
+  background-color: #333;
+  padding: 1rem;
+  color: white;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.topnav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.topnav a {
+  color: white;
+  text-decoration: none;
+}
+
+.topnav a:hover {
+  color: #ddd;
+}
+
+.sidebar {
+  background-color: #f4f4f4;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 60px;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.sidebar a {
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+.sidebar a:hover {
+  background-color: #ddd;
+  border-radius: 4px;
+}
+
+.page-content {
+
+  margin: 70px 20vmin 0px 20vmin;
+}
+
+/* info section at the bottom of the page */
+.flex-container {
+  padding: 2vmin;
+  padding-left: 16vw;
+  padding-right: 16vw;
+  background-color: black;
+  position: static;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: flex-end;
+
+  justify-content: space-evenly;
+}
+.flex-box {
+  border: solid #000;
+  border-width: 0 1px;
+  border-color: white;
+  width: 30vmin;
+  margin-right: 0vmin;
+  margin-left: 10vmin;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+}
