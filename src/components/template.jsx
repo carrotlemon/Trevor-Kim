@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-const QuickSort = ({ data }) => {
+const NAMEOFCOMPONENT = ({ data }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -49,7 +49,5 @@ const QuickSort = ({ data }) => {
     animate();
   }, []);
 
-  return <canvas ref={canvasRef} className="w-[40vw] h-[80vh] border" />;
+  return <canvas ref={canvasRef} className="w-[80vw] h-[80vh] border" />;
 };
-
-export default QuickSort;

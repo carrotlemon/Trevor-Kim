@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-const Chart = ({ data }) => {
+const Rays = ({ data }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Chart = ({ data }) => {
   return <canvas ref={canvasRef} className="w-[80vw] h-[80vh] border" />;
 };
 
-export default Chart;
+export default Rays;
 
 const collides = (pointX, pointY, circleX, circleY, radius, canvasWidth, canvasHeight) => {
   if (pointX < 0 || pointX > canvasWidth || pointY < 0 || pointY > canvasHeight) {

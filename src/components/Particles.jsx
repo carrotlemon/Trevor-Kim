@@ -1,6 +1,7 @@
+import { Point, Rectangle, Quadtree } from '../js/Quadtree.jsx'
 import React, { useRef, useEffect } from "react";
 
-const QuickSort = ({ data }) => {
+const Particles = ({ data }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -12,25 +13,14 @@ const QuickSort = ({ data }) => {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
-    // let circleX = 50;
-    // let circleY = canvas.height / 2;
-    // let counter = 0;
-    // let phase = 0;
-    // let direction = 1;
-    // let radius = 50;
-    // let numRays = 800;
-    // let lightX = canvas.width / 2;
-    // let lightY = canvas.height / 2;
+    let qt = new Quadtree(new Rectangle(0, 0, canvas.width, canvas.height), 5);
+    qt.insert(new Point())
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // // Draw Rays
-      // for (let theta = 0; theta < 2 * Math.PI; theta += 2 * Math.PI / numRays) {
-      //   let otherPoint = getRayCollision(lightX, lightY, theta, circleX, circleY, radius, canvas.width, canvas.height);
-      //   //console.log("light: %d, %d other: %d, %d", lightX, lightY, otherPoint[0], otherPoint[1]);
-      //   drawLine(ctx, lightX, lightY, otherPoint[0], otherPoint[1]);
-      // }
+      // Draw all points and boundary of quadtree
+      qt.draw(ctx, true)
 
       // // Draw the moving circle
       // drawCircle(ctx, circleX, circleY, radius);
@@ -49,7 +39,11 @@ const QuickSort = ({ data }) => {
     animate();
   }, []);
 
-  return <canvas ref={canvasRef} className="w-[40vw] h-[80vh] border" />;
+  return <canvas ref={canvasRef} className="w-[80vw] h-[80vh] border" />;
 };
 
-export default QuickSort;
+export default Particles;
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}

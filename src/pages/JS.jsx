@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Chart from '../components/Chart';
+import Rays from '../components/Rays';
 
 export default function JS() {
   const [data, setData] = useState([25, 30, 45, 60, 20, 65, 75]);
@@ -8,7 +8,7 @@ export default function JS() {
       <> 
           <h1>JS is fun!</h1>
           <p>ssss</p>
-          <Chart />
+          <Rays />
       </>
   );
 }
