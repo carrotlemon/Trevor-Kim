@@ -1,44 +1,94 @@
-// Chart.js
 import React, { useRef, useEffect } from "react";
-import * as d3 from "d3";
 
 const Chart = ({ data }) => {
-  const svgRef = useRef();
+  const canvasRef = useRef(null);
 
   useEffect(() => {
-    const svg = d3.select(svgRef.current);
-    const width = 500;
-    const height = 200;
-    
-    // Clear any previous elements
-    svg.selectAll("*").remove();
 
-    // Set up scaling for the data
-    const xScale = d3
-      .scaleBand()
-      .domain(data.map((d, i) => i))
-      .range([0, width])
-      .padding(0.2);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
 
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(data)])
-      .range([height, 0]);
+    // Set canvas size
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
 
-    // Draw the bars
-    svg
-      .selectAll(".bar")
-      .data(data)
-      .join("rect")
-      .attr("class", "bar")
-      .attr("x", (d, i) => xScale(i))
-      .attr("y", yScale)
-      .attr("width", xScale.bandwidth())
-      .attr("height", d => height - yScale(d))
-      .attr("fill", "teal");
-  }, [data]);
+    let circleX = 50;
+    let circleY = canvas.height / 2;
+    let counter = 0;
+    let phase = 0;
+    let direction = 1;
+    let radius = 50;
+    let numRays = 800;
+    let lightX = canvas.width / 2;
+    let lightY = canvas.height / 2;
 
-  return <svg ref={svgRef} width="500" height="200"></svg>;
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Rays
+      for (let theta = 0; theta < 2 * Math.PI; theta += 2 * Math.PI / numRays) {
+        let otherPoint = getRayCollision(lightX, lightY, theta, circleX, circleY, radius, canvas.width, canvas.height);
+        //console.log("light: %d, %d other: %d, %d", lightX, lightY, otherPoint[0], otherPoint[1]);
+        drawLine(ctx, lightX, lightY, otherPoint[0], otherPoint[1]);
+      }
+
+      // Draw the moving circle
+      drawCircle(ctx, circleX, circleY, radius);
+
+      // Update position
+      circleX += direction * 10;
+      counter += 1;
+      circleY = canvas.height/2 + 200*Math.cos(0.05*counter)*Math.sin(0.01*circleX);
+      if (circleX > canvas.width - radius || circleX < radius) {
+        direction *= -1;
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  }, []);
+
+  return <canvas ref={canvasRef} className="w-[80vw] h-[80vh] border" />;
 };
 
 export default Chart;
+
+const collides = (pointX, pointY, circleX, circleY, radius, canvasWidth, canvasHeight) => {
+  if (pointX < 0 || pointX > canvasWidth || pointY < 0 || pointY > canvasHeight) {
+    return true;
+  } else {
+    let distance = (pointX - circleX) * (pointX - circleX) + (pointY - circleY) * (pointY - circleY);
+    return distance <= radius*radius;
+  }
+}
+
+const getRayCollision = (x, y, theta, circleX, circleY, radius, canvasWidth, canvasHeight) => {
+  let newX = x;
+  let newY = y;
+  let dx = 10*Math.cos(theta);
+  let dy = 10*Math.sin(theta);
+  while (!collides(newX, newY, circleX, circleY, radius, canvasWidth, canvasHeight)) {
+    newX+= dx, newY += dy;
+  }
+  console.log("new coords: " + newX + " " + newY);
+  return [newX, newY];
+}
+
+const drawCircle = (ctx, circleX, circleY, radius) => {
+  ctx.beginPath();
+  ctx.arc(circleX, circleY, radius, 0, Math.PI * 2);
+  ctx.fillStyle = "red";
+  ctx.fill();
+  ctx.closePath();
+}
+
+const drawLine = (ctx, x1, y1, x2, y2) => {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = "blue";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.closePath();
+}

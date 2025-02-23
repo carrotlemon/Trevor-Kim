@@ -1,49 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import koupen from '../assets/koupen.jpeg';
-import FadeText from '../components/FadeText';
-import FadeInOnScroll from '../components/FadeInOnScroll';
+import FadeInSection from '../components/FadeInSection';
 import { FadeIn } from 'react-scroll-motion';
-
-const FadeInSection = ({ children }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const sectionRef = useState(null);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-        ([entry]) => {
-            if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.disconnect();
-            }
-        },
-        { threshold: 0.1 }
-        );
-
-        if (sectionRef.current) {
-        observer.observe(sectionRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, []);
-
-    return (
-        <div
-        ref={sectionRef}
-        className={`transition-opacity duration-1000 ease-in-out ${
-            isVisible ? "opacity-100" : "opacity-0"
-        }`}
-        >
-        {children}
-        </div>
-    );
-};
+import '../index.css'
 
 export default function Home() {
     return (
         <>
             <FadeInSection>
-                <h1>Home</h1>
-                <h1>Welcome to My Website</h1>
+                <p className="text-[50px]">Home</p>
+                <p className="text-[50px]">Welcome to My Website</p>
             </FadeInSection>
             <p>This is a basic website layout with a top navigation bar and sidebar.</p>
             <h2>Main Content</h2>
@@ -62,3 +28,4 @@ export default function Home() {
         </>
     );
 }
+

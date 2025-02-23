@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import * as d3 from "d3";
 
-const QuickSort = () => {
+const RubiksCube = () => {
   return (
     <div>
       <h1>Quicksort</h1>
@@ -10,4 +9,4 @@ const QuickSort = () => {
   );
 };
 
-export default QuickSort;
+export default RubiksCube;

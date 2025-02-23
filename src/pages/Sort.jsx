@@ -9,6 +9,7 @@ export default function Sort() {
       <> 
           <h1>Sort</h1>
           <p>ssssssssssssssssssssssssssssssssssssssssssssssssssssssss sssssssssssssssssssssssssssssss sssssssssssssssssssssssssssssssssssssss sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</p>
+          <QuickSort />
       </>
   );
 }
