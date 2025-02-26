@@ -6,5 +6,7 @@
 
 
 Note to self:
+
 npm install
+
 npm run dev
