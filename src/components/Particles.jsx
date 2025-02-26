@@ -13,10 +13,17 @@ const Particles = ({ data }) => {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
-    const numParticles = 100;
+    // Create Particles
+    const numParticles = 4000;
     let qt = new Quadtree(new Rectangle(0, 0, canvas.width, canvas.height), 5);
+    let theta = 0;
+    let r = 0;
     for(let i = 0; i < numParticles; ++i) {
-      qt.insert(new Point(canvas.width*Math.random(), canvas.height*Math.random(), null, "yellow"));
+      // qt.insert(new Point(canvas.width*Math.random(), canvas.height*Math.random(), null, "yellow"));
+      theta = 2*Math.PI*Math.random();
+      r = 250*Math.random();
+      console.log(canvas.width/2+r*Math.cos(theta) + " " + canvas.height/2+r*Math.sin(theta));
+      qt.insert(new Point(canvas.width/2+r*Math.cos(theta), canvas.height/2+r*Math.sin(theta), null, "yellow"));
     }
 
     const animate = () => {
