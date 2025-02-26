@@ -55,9 +55,9 @@ class Quadtree {
 
     subdivide() {
         let { x, y, w, h } = this.boundary;
-        let nw = new Rectangle(x - w / 2, y - h / 2, w / 2, h / 2);
-        let ne = new Rectangle(x + w / 2, y - h / 2, w / 2, h / 2);
-        let sw = new Rectangle(x - w / 2, y + h / 2, w / 2, h / 2);
+        let nw = new Rectangle(x, y, w / 2, h / 2);
+        let ne = new Rectangle(x + w / 2, y, w / 2, h / 2);
+        let sw = new Rectangle(x, y + h / 2, w / 2, h / 2);
         let se = new Rectangle(x + w / 2, y + h / 2, w / 2, h / 2);
 
         this.northwest = new Quadtree(nw, this.capacity);
@@ -113,31 +113,24 @@ class Quadtree {
         // Draw Boundary
         if(showBoundaries) {
             ctx.strokeStyle = "blue";
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 1;
             ctx.strokeRect(this.boundary.x, this.boundary.y, this.boundary.w, this.boundary.h);
         }
         // Draw Points
-        for (const p in this.points) {
+        for (const p of this.points) {
             ctx.fillStyle = (p?.color) ? p.color : "white";
             ctx.beginPath();
-            ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
+            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
             ctx.fill();
             ctx.closePath();
         }
-        // this.points.forEach(function(p) {
-        //     ctx.fillStyle = (p?.color) ? p.color : "white";
-        //     ctx.beginPath();
-        //     ctx.arc(p.x, p.y, 10, 0, Math.PI * 2);
-        //     ctx.fill();
-        //     ctx.closePath();
-        // });
 
         // Draw Divided Boundaries
         if(this.divided) {
-            this.northwest.draw(ctx)
-            this.northeast.draw(ctx)
-            this.southwest.draw(ctx)
-            this.southeast.draw(ctx)
+            this.northwest.draw(ctx, showBoundaries);
+            this.northeast.draw(ctx, showBoundaries);
+            this.southwest.draw(ctx, showBoundaries);
+            this.southeast.draw(ctx, showBoundaries);
         }
     }
 }

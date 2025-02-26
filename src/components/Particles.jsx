@@ -13,8 +13,11 @@ const Particles = ({ data }) => {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
+    const numParticles = 100;
     let qt = new Quadtree(new Rectangle(0, 0, canvas.width, canvas.height), 5);
-    qt.insert(new Point())
+    for(let i = 0; i < numParticles; ++i) {
+      qt.insert(new Point(canvas.width*Math.random(), canvas.height*Math.random(), null, "yellow"));
+    }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);

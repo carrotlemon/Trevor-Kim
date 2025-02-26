@@ -71,7 +71,6 @@ const getRayCollision = (x, y, theta, circleX, circleY, radius, canvasWidth, can
   while (!collides(newX, newY, circleX, circleY, radius, canvasWidth, canvasHeight)) {
     newX+= dx, newY += dy;
   }
-  console.log("new coords: " + newX + " " + newY);
   return [newX, newY];
 }
 
