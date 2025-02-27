@@ -9,8 +9,8 @@ export default function JS() {
       <> 
           <h1>JS is fun!</h1>
           <p>ssss</p>
-          <Rays />
           <Particles />
+          {/* <Rays /> */}
       </>
   );
 }

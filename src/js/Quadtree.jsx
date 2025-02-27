@@ -15,11 +15,26 @@
 
 
 class Point {
-    constructor(x, y, data = null, color = '#ff0000') {
+    constructor(x, y, colorid = null, color = '#ff0000') {
         this.x = x;
         this.y = y;
-        this.data = data;
+        this.vx = 0;
+        this.vy = 0;
+        this.colorid = colorid;
         this.color = color;
+    }
+    applyForce(force, theta, deltaTime) {
+        this.vx += force*Math.cos(theta)*deltaTime;
+        this.vy += force*Math.sin(theta)*deltaTime;
+    }
+    update(deltaTime=0) {
+        this.x += this.vx*deltaTime;
+        this.y += this.vy*deltaTime;
+    }
+    distanceSquared(otherPoint) {
+        let dx = this.x - otherPoint.x;
+        let dy = this.y - otherPoint.y;
+        return dx*dx + dy*dy;
     }
 }
 class Rectangle {
@@ -31,17 +46,17 @@ class Rectangle {
     }
 
     contains(point) {
-        return (point.x >= this.x - this.w &&
-            point.x <= this.x + this.w &&
-            point.y >= this.y - this.h &&
-            point.y <= this.y + this.h);
+        return (point.x >= this.x &&
+                point.x <= this.x + this.w &&
+                point.y >= this.y &&
+                point.y <= this.y + this.h);
     }
 
     intersects(range) {
-        return !(range.x - range.w > this.x + this.w ||
-            range.x + range.w < this.x - this.w ||
-            range.y - range.h > this.y + this.h ||
-            range.y + range.h < this.y - this.h);
+        return !(range.x + range.w < this.x ||
+                 range.x > this.x + this.w ||
+                 range.y + range.h < this.y ||
+                 range.y > this.y + this.h);
     }
 }
 
@@ -92,21 +107,22 @@ class Quadtree {
         if (!this.boundary.intersects(range)) {
             return found;
         }
-
+    
+        let newFound = [...found]; // Create a new array
         for (let p of this.points) {
             if (range.contains(p)) {
-                found.push(p);
+                newFound.push(p);
             }
         }
-
+    
         if (this.divided) {
-            this.northwest.query(range, found);
-            this.northeast.query(range, found);
-            this.southwest.query(range, found);
-            this.southeast.query(range, found);
+            newFound = this.northwest.query(range, newFound);
+            newFound = this.northeast.query(range, newFound);
+            newFound = this.southwest.query(range, newFound);
+            newFound = this.southeast.query(range, newFound);
         }
-
-        return found;
+    
+        return newFound;
     }
 
     draw(ctx, showBoundaries) {
@@ -132,6 +148,14 @@ class Quadtree {
             this.southwest.draw(ctx, showBoundaries);
             this.southeast.draw(ctx, showBoundaries);
         }
+    }
+
+    rebuild(allParticles) {
+        newQT = new Quadtree(this.boundary, this.capacity);
+        for(let p of allParticles) {
+            newQT.insert(p);
+        }
+        return newQT;
     }
 }
 
