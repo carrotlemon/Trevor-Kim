@@ -8,7 +8,6 @@ import Sort from "./pages/Sort"
 import JS from "./pages/JS"
 import Navbar from "./components/Navbar"
 
-
 function App() {
   const [count, setCount] = useState(0)
 

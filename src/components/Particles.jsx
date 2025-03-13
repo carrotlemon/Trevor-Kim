@@ -15,29 +15,33 @@ const Particles = ({ data }) => {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
+    // 0 - Wrap 1 - Bounce
+    const WALL_BEHAVIOR = 1;
     
     const GRAVITY_TOGGLE = true;
-    const GRAVITY = 10;
+    const GRAVITY = 100;
     const GRAVITY_X = canvas.width / 2;
     const GRAVITY_Y = canvas.height / 2;
 
     const ORBIT = true;
-    const ORBIT_SPEED = Math.sqrt(GRAVITY)/10;
-
-    
+    const ORBIT_SPEED = 1*Math.sqrt(Math.sqrt(GRAVITY))/10;
 
     const CIRCLE_SPAWN = true;
-    const SPAWN_RADIUS = 500;
+    const SPAWN_RADIUS = 300;
 
-    const PARTICLE_COUNT = 300; // per color
-    const COLOR_COUNT = 4;
+    const PARTICLE_COUNT = 100; // per color
+    const COLOR_OFFSET = 0;
+    const COLOR_COUNT = 5;
+    const MATRIX_SCALAR = 10;
+    const MATRIX_SELF_SET_VALUE = false;
+    const MATRIX_SELF_SET_VALUE_VALUE = -1;
 
     const MIN_RADIUS = 50;
-    const MIN_FORCE = 0.7;
-    const MAX_RADIUS = 100;
+    const MIN_FORCE = 1;
+    const MAX_RADIUS = 200;
 
     const PARTICLE_MASS = 10;
-    const FORCE_SCALAR = 1; // Increased for better visibility
+    const FORCE_SCALAR = 200; // Increased for better visibility
 
     // Create Particles
 
@@ -45,14 +49,18 @@ const Particles = ({ data }) => {
     let matrix = Array.from({ length: COLOR_COUNT }, () => Array(COLOR_COUNT).fill(0));
     for (let r = 0; r < COLOR_COUNT; ++r) {
       for (let c = 0; c < COLOR_COUNT; ++c) {
-        matrix[r][c] = 100*2 * Math.random() - 100; // -1 to 1 force scalar
+        if(MATRIX_SELF_SET_VALUE && r == c) {
+          matrix[r][c] = MATRIX_SELF_SET_VALUE_VALUE;
+        } else {
+          matrix[r][c] = MATRIX_SCALAR*2 * Math.random() - MATRIX_SCALAR; // -1 to 1 force scalar
+        }
       }
     }
 
     // Initialize particles
     particlesRef.current = [];
     for (let color = 0; color < COLOR_COUNT; ++color) {
-      const rgbColor = hsvToRgb(color / COLOR_COUNT, 1.0, 1.0);
+      const rgbColor = hsvToRgb(color / (COLOR_COUNT+COLOR_OFFSET), 1.0, 1.0);
       for (let i = 0; i < PARTICLE_COUNT; ++i) {
         // Set location to random spot in a circle
         let newPoint;
@@ -120,10 +128,18 @@ const Particles = ({ data }) => {
         p.update(deltaTime);
 
         // Boundary conditions - wrap around edges ADD A BOUNCE OPTION
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
+        if(!WALL_BEHAVIOR) {
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+        } else {
+          if(p.x < 0) { p.x = 0; p.vx *= -1; }
+          if(p.x > canvas.height) { p.x = canvas.height; p.vx *= -1}
+          if(p.y < 0) { p.y = 0; p.vy *= -1; }
+          if(p.y > canvas.height) { p.y = canvas.height; p.vy *= -1}
+        }
+        
       }
 
       // Update Quadtree
@@ -131,7 +147,7 @@ const Particles = ({ data }) => {
 
       // Draw
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      qtRef.current.draw(ctx, true);
+      qtRef.current.draw(ctx, false);
 
       requestAnimationFrame(animate);
     };
